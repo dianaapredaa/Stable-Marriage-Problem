@@ -84,4 +84,4 @@
 ;   - p' îl preferă pe p1 în raport cu persoana cu care este logodit
 
 (define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  (and (preferable? p1-list p1 p2) (get-partner engagements p1)))
+  (and (preferable? p1-list (car (get-women p1-list)) p2) (preferable? (get-women p1-list) (get-partner engagements (car (get-women p1-list))))))
