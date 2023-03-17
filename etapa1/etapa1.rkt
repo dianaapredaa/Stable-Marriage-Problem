@@ -18,10 +18,8 @@
 ; Folosiți recursivitate pe coadă.
 (define (get-woman-tail wpref acc)
      (if (null? wpref)
-         acc
-         (get-woman-tail (cdr wpref) (append acc (list (car (car wpref)))))))
-      ;null
-      ;(cons (car (car wpref)) (get-women (cdr wpref)))))
+         (reverse acc)
+         (get-woman-tail (cdr wpref) (cons (car (car wpref)) acc))))
 
 (define (get-women wpref)
   (get-woman-tail wpref '()))
@@ -53,7 +51,10 @@
 ; Nu folosiți operatori condiționali, folosiți în schimb operatori
 ; logici pentru a obține același efect.
 (define (preferable? pref-list x y)
-  (and (not (null? pref-list)) (or (and (equal? x (car pref-list)) (not (false? (member y pref-list)))) (preferable? (cdr pref-list) x y))))
+  (and (not (null? pref-list))
+       (or (and (equal? x (car pref-list))
+                (not (false? (member y pref-list))))
+           (preferable? (cdr pref-list) x y))))
 
 
 ; TODO 5ch
@@ -81,5 +82,6 @@
 ; - un partener p' este mai potrivit decât p2 dacă îndeplinește 2 condiții:
 ;   - p1 îl preferă pe p' în raport cu p2
 ;   - p' îl preferă pe p1 în raport cu persoana cu care este logodit
+
 (define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  'your-code-here)
+  (and (preferable? p1-list p1 p2) (get-partner engagements p1)))
