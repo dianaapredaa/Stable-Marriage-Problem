@@ -1,3 +1,4 @@
+;Copyright Preda Diana 2022-2023
 #lang racket
 
 (provide (all-defined-out))
@@ -53,7 +54,7 @@
 (define (preferable? pref-list x y)
   (and (not (null? pref-list))
        (or (and (equal? x (car pref-list))
-                (not (false? (member y pref-list))))
+                (not (false? (member y (cdr pref-list)))))
            (preferable? (cdr pref-list) x y))))
 
 
@@ -84,8 +85,8 @@
 ;   - p' îl preferă pe p1 în raport cu persoana cu care este logodit
 
 (define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  (cond
-    ((null? p1-list) #f)
-    ((and (preferable? p1-list (car p1-list) p2)
-       (preferable? (get-pref-list pref2 (car p1-list)) p1 (get-partner engagements (car p1-list)))) #t)
-    (else (better-match-exists? p1 p2 (cdr p1-list) pref2 engagements))))
+  (and (not (null? p1-list))
+       (or (and (preferable? p1-list (car p1-list) p2)
+                (preferable? (get-pref-list pref2 (car p1-list)) p1 (get-partner engagements (car p1-list))))
+           (better-match-exists? p1 p2 (cdr p1-list) pref2 engagements))))
+     
