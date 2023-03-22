@@ -51,8 +51,7 @@
 ; și false în caz contrar.
 ; Folosiți funcția member.
 (define (preferable? pref-list x y)
-  'your-code-here)
-
+  (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
 
 ; TODO 5
 ; Implementați recursiv funcționala find-first, care primește
