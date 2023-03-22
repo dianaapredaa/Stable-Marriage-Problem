@@ -61,7 +61,10 @@
 ; Implementarea trebuie să fie eficientă în sensul că nu trebuie
 ; să continue explorarea listei odată ce s-a găsit elementul.
 (define (find-first p L)
-  'your-code-here)
+  (cond
+    ((null? L) #f)
+    ((p (car L)) (car L))
+    (else (find-first p (cdr L)))))
 
 
 ; TODO 6
