@@ -15,7 +15,7 @@
 ; bărbaților și calculează lista bărbaților din problemă.
 ; Folosiți orice funcțională exceptând foldl/foldr.
 (define (get-men mpref)
-  (map car mpref))
+  )
 
 
 ; TODO 2
@@ -25,7 +25,7 @@
 ; Folosiți foldl sau foldr, astfel încât să nu fie necesare
 ; operații de tip append sau reverse.
 (define (get-women wpref)
-  (foldr (lambda (x acc) (cons (car x) acc)) '() wpref))
+  'your-code-here)
 
 
 ; TODO 3
@@ -39,7 +39,8 @@
 ; (get-pref-list wpref 'ana) => '(bobo adi cos)
 ; Folosiți minim o funcțională și minim o funcție anonimă.
 (define (get-pref-list pref person)
-  (cdr (car (filter (lambda (x) (not (false? x))) (map (lambda (x) (member person x)) pref)))))
+  'your-code-here)
+
 
 ; TODO 4
 ; Ca în etapa 1, dar este interzisă recursivitatea explicită
