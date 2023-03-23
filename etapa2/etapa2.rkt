@@ -105,9 +105,8 @@
 ;   persoanele de același gen cu p1
 ; Folosiți change-first.
 (define (update-engagements engagements p1 p2)
-  'your-code-here)
-
-
+  (change-first (lambda (x) (equal? (car x) p1)) engagements (cons p1 p2)))
+  
 ; TODO
 ; Copiați implementarea funcției better-match-exists? din etapa 1.
 ; Funcția nu este repunctată de checker, dar este necesară pentru
@@ -115,7 +114,10 @@
 ; Dacă nu ați implementat better-match-exists? în etapa 1, solicitați 
 ; o rezolvare de la asistent, astfel încât să puteți continua.
 (define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  'your-code-here)
+  (and (not (null? p1-list))
+       (or (and (preferable? p1-list (car p1-list) p2)
+                (preferable? (get-pref-list pref2 (car p1-list)) p1 (get-partner engagements (car p1-list))))
+           (better-match-exists? p1 p2 (cdr p1-list) pref2 engagements))))
 
 
 ; TODO 9
