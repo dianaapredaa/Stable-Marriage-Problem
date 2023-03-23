@@ -76,9 +76,11 @@
 ; întoarce false.
 ; Folosiți find-first, fără să îl apelați de 2 ori (hint: define în define).
 (define (get-partner engagements person)
-  'your-code-here)
-  
-
+  (define pair (find-first (lambda (x) (equal? (car x) person)) engagements))
+  (if (not (false? pair))
+      (cdr pair)
+      #f))
+ 
 ; TODO 7
 ; Implementați recursiv funcționala change-first care primește
 ; un predicat p, o listă L și o valoare val, și întoarce o nouă 
@@ -87,8 +89,10 @@
 ; Dacă niciun element din L nu satisface predicatul, lista L
 ; rămâne neschimbată.
 (define (change-first p L val)
-  'your-code-here)
-
+    (cond
+      ((null? L) null)
+      ((p (car L)) (cons val (cdr L)))
+      (else (cons (car L) (change-first p (cdr L) val)))))
 
 ; TODO 8
 ; Implementați funcția update-engagements care primește o listă de
