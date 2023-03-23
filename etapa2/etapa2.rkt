@@ -51,8 +51,8 @@
 ; și false în caz contrar.
 ; Folosiți funcția member.
 (define (preferable? pref-list x y)
-  (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
-
+ (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
+ 
 ; TODO 5
 ; Implementați recursiv funcționala find-first, care primește
 ; un predicat și o listă și întoarce primul element al listei
@@ -132,5 +132,6 @@
 ; - fiecare cuplu din lista engagements are pe prima poziție
 ;   o femeie
 (define (stable-match? engagements mpref wpref)
-  'your-code-here)
-
+  (if (null? (filter false? (map (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements)) engagements)))
+      #t
+      #f))
