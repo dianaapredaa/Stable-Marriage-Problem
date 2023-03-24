@@ -51,7 +51,7 @@
 ; și false în caz contrar.
 ; Folosiți funcția member.
 (define (preferable? pref-list x y)
- (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
+  (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
  
 ; TODO 5
 ; Implementați recursiv funcționala find-first, care primește
@@ -113,12 +113,19 @@
 ; implementarea funcției stable-match? de mai jos.
 ; Dacă nu ați implementat better-match-exists? în etapa 1, solicitați 
 ; o rezolvare de la asistent, astfel încât să puteți continua.
-(define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  (and (not (null? p1-list))
-       (or (and (preferable? p1-list (car p1-list) p2)
-                (preferable? (get-pref-list pref2 (car p1-list)) p1 (get-partner engagements (car p1-list))))
-           (better-match-exists? p1 p2 (cdr p1-list) pref2 engagements))))
 
+; functie primita de la laborant
+
+(define (better-match-exists? p1 p2 p1-list pref2 engagements)
+  (define (better-match? p1 p1-list p2 p p-list p-partner)
+    (and (preferable? p1-list p p2)
+         (preferable? p-list p1 p-partner)
+         (not (equal? p p2))
+         (not (equal? p1 p-partner))))
+  (cond ((null? engagements) #f)
+        ((better-match? p1 p1-list p2
+                        (car (first engagements)) (get-pref-list pref2 (car (first engagements))) (cdr (first engagements))) #t)
+        (else (better-match-exists? p1 p2 p1-list pref2 (rest engagements)))))
 
 ; TODO 9
 ; Implementați funcția stable-match? care primește o listă 
@@ -131,7 +138,9 @@
 ; Precizări (aspecte care se garantează, nu trebuie verificate):
 ; - fiecare cuplu din lista engagements are pe prima poziție
 ;   o femeie
+
 (define (stable-match? engagements mpref wpref)
-  (if (null? (filter false? (map (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements)) engagements)))
+  (if (null? (filter (lambda (x) (equal? true x)) (map (or (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements))
+                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (reverse engagements)))) engagements)))
       #t
       #f))
