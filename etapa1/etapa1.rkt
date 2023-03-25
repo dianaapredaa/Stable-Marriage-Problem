@@ -12,7 +12,6 @@
       null
       (cons (car (car mpref)) (get-men (cdr mpref)))))
 
-
 ; TODO 2
 ; Implementați o funcție care primește lista preferințelor
 ; femeilor și calculează lista femeilor din problemă.
@@ -24,7 +23,6 @@
 
 (define (get-women wpref)
   (get-woman-tail wpref '()))
-
 
 ; TODO 3
 ; Implementați o funcție recursivă care primește o listă de liste
@@ -57,7 +55,6 @@
                 (not (false? (member y (cdr pref-list)))))
            (preferable? (cdr pref-list) x y))))
 
-
 ; TODO 5ch
 ; Implementați o funcție recursivă care primește o listă de logodne
 ; (în care fiecare logodnă este o pereche cu punct între parteneri)
@@ -71,7 +68,6 @@
     ((equal? (car (car engagements)) person) (cdr (car engagements)))
     (else (get-partner (cdr engagements) person))))
 
-
 ; TODO 6
 ; Implementați o funcție care primește 2 persoane logodite, p1 și p2,
 ; lista preferințelor lui p1, lista preferințelor tuturor persoanelor
@@ -83,7 +79,6 @@
 ; - un partener p' este mai potrivit decât p2 dacă îndeplinește 2 condiții:
 ;   - p1 îl preferă pe p' în raport cu p2
 ;   - p' îl preferă pe p1 în raport cu persoana cu care este logodit
-
 (define (better-match-exists? p1 p2 p1-list pref2 engagements)
   (and (not (null? p1-list))
        (or (and (preferable? p1-list (car p1-list) p2)
