@@ -26,12 +26,13 @@
              (mpref mpref)
              (wpref wpref)
              (acc '()))
-    ;if true acc altfel faci let*
-    (let* ((first-couple (car engagements)) (woman (car first-couple)) (man (cdr first-couple)))
-      (cond ((null? engagements) acc)
-            ((better-match-exists? woman man (get-pref-list wpref woman) mpref engagements) (loop (cdr engagements) mpref wpref (cons first-couple)))
-            (else (loop (cdr engagements) mpref wpref acc))))))
-
+    ; iterate through engagements to find unstable one's
+    (if (null? engagements)
+        acc
+        (let* ((couple (car engagements)) (woman (car couple)) (man (cdr couple)))
+          (if (better-match-exists? man woman (get-pref-list mpref man) wpref engagements)
+              (loop (cdr engagements) mpref wpref (cons couple acc))
+              (loop (cdr engagements) mpref wpref acc))))))
 
 ; TODO 2
 ; Implementați funcția engage care primește o listă free-men
