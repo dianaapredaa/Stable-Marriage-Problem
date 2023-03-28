@@ -57,18 +57,28 @@
 ; veți defini funcții ajutătoare recursive).
 ; Folosiți let și/sau let* pentru a evita calcule duplicate.
 (define (engage free-men engagements mpref wpref)
-  (let loop ((free-men)
-             (engs engagements)
-             (mpref mpref)
-             (wpref wpref)
-             (acc '())
+  (let men-loop ((free-m free-men)
+                 (engs engagements))
      ; iterate through unmarried man to find new marriages
-    (if (null? free-man)
+    (if (null? free-m)
         ; return engagements list
-        acc
-        '()))))
-        
-
+        engs
+        (let* ((man (car free-m))
+               (pref-list (get-pref-list mpref man)))
+          ; iterate through woman's list
+          (let ((ans (let women-loop ((woman (car pref-list)))
+            (let ((couple (cons woman man)))
+              (cond
+                ((null? pref-list) #f)
+                ((null? (map (lambda (x) (equal? woman (car x))) engs)) couple)
+                ((and (better-match-exists? (get-partner engs woman) woman (get-pref-list mpref (get-partner engs woman)) wpref engs)
+                      (preferable? (get-pref-list wpref woman) man (get-partner engs woman))) couple)
+                (else (women-loop (cdr pref-list))))))))
+            (if (not (false? ans))
+                (men-loop (cdr free-m) (cons ans engs))
+                (men-loop (cdr free-m) engs)))))))
+                         
+            
 
 ; TODO 3
 ; Implementați funcția gale-shapley care este un wrapper pentru
