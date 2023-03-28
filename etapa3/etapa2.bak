@@ -126,7 +126,6 @@
                         (car (first engagements)) (get-pref-list pref2 (car (first engagements))) (cdr (first engagements))) #t)
         (else (better-match-exists? p1 p2 p1-list pref2 (rest engagements)))))
 
-
 ; TODO 9
 ; Implementați funcția stable-match? care primește o listă 
 ; completă de logodne engagements, o listă de preferințe masculine 
@@ -140,6 +139,6 @@
 ;   o femeie
 (define (stable-match? engagements mpref wpref)
   (if (null? (filter (lambda (x) (equal? true x)) (map (or (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements))
-                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (map (lambda (x) (cons (cdr x) (car x))) engagements)))) engagements)))
+                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (reverse engagements)))) engagements)))
       #t
       #f))

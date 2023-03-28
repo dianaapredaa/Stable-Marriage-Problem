@@ -22,17 +22,21 @@
 ; Folosiți una sau mai multe dintre expresiile let, let*, letrec,
 ; named let pentru a vă putea conforma acestor restricții.
 (define (get-unstable-couples engagements mpref wpref)
-  (let loop ((engagements engagements)
+  (let loop ((engs engagements)
              (mpref mpref)
              (wpref wpref)
              (acc '()))
     ; iterate through engagements to find unstable one's
-    (if (null? engagements)
+    (if (null? engs)
+        ; return unstable matches
         acc
-        (let* ((couple (car engagements)) (woman (car couple)) (man (cdr couple)))
-          (if (better-match-exists? man woman (get-pref-list mpref man) wpref engagements)
-              (loop (cdr engagements) mpref wpref (cons couple acc))
-              (loop (cdr engagements) mpref wpref acc))))))
+        (let* ((couple (car engs)) (woman (car couple)) (man (cdr couple)))
+          ; check if the match is stable or not
+          (if (or (better-match-exists? man woman (get-pref-list mpref man) wpref engagements)
+                   (better-match-exists? woman man (get-pref-list wpref woman) mpref (map (lambda (x) (cons (cdr x) (car x))) engagements)))
+              ; add ustable match to the unstable matches lis
+              (loop (cdr engs) mpref wpref (cons couple acc))
+              (loop (cdr engs) mpref wpref acc))))))
 
 ; TODO 2
 ; Implementați funcția engage care primește o listă free-men
@@ -53,7 +57,17 @@
 ; veți defini funcții ajutătoare recursive).
 ; Folosiți let și/sau let* pentru a evita calcule duplicate.
 (define (engage free-men engagements mpref wpref)
-  'your-code-here)
+  (let loop ((free-men)
+             (engs engagements)
+             (mpref mpref)
+             (wpref wpref)
+             (acc '())
+     ; iterate through unmarried man to find new marriages
+    (if (null? free-man)
+        ; return engagements list
+        acc
+        '()))))
+        
 
 
 ; TODO 3
