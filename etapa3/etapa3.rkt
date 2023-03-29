@@ -92,5 +92,5 @@
 ; care apar în perechi.
 ; Folosiți funcționale, fără recursivitate explicită.
 (define (get-couple-members pair-list)
-  'your-code-here)
+  (apply append (map (lambda (pair) (list (car pair) (cdr pair))) pair-list)))
 
