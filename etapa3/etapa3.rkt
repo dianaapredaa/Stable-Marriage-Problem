@@ -57,28 +57,24 @@
 ; veți defini funcții ajutătoare recursive).
 ; Folosiți let și/sau let* pentru a evita calcule duplicate.
 (define (engage free-men engagements mpref wpref)
+  ; iterate through unmarried man to find new marriages
   (let men-loop ((free-m free-men)
                  (engs engagements))
-     ; iterate through unmarried man to find new marriages
     (if (null? free-m)
         ; return engagements list
         engs
         (let* ((man (car free-m))
                (pref-list (get-pref-list mpref man)))
           ; iterate through woman's list
-          (let ((ans (let women-loop ((women pref-list))
-            (let* ((woman (car women)) (couple (cons woman man)))
+          (let women-loop ((women pref-list))
+            (let* ((woman (car women))
+                   (couple (cons woman man)))
               (cond
-                ((null? pref-list) #f)
-                ((null? (filter (lambda (x) (equal? woman (car x))) engs)) couple)
+                ((null? pref-list) (men-loop (cdr free-m) engs))
+                ((null? (filter (lambda (x) (equal? woman (car x))) engs)) (men-loop (cdr free-m) (cons couple engs)))
                 ((and (better-match-exists? (get-partner engs woman) woman (get-pref-list mpref (get-partner engs woman)) wpref engs)
-                      (preferable? (get-pref-list wpref woman) man (get-partner engs woman))) couple)
-                (else (women-loop (cdr pref-list))))))))
-            (if (not (false? ans))
-                (men-loop (cdr (cons man free-m)) (cons ans engs))
-                (men-loop (cdr free-m) engs)))))))
-                         
-            
+                      (preferable? (get-pref-list wpref woman) man (get-partner engs woman))) (men-loop (cdr (cons man free-m)) (update-engagements engs woman man)))
+                (else (women-loop (cdr pref-list))))))))))
 
 ; TODO 3
 ; Implementați funcția gale-shapley care este un wrapper pentru
