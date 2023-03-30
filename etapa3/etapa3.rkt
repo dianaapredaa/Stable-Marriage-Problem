@@ -23,8 +23,6 @@
 ; named let pentru a vă putea conforma acestor restricții.
 (define (get-unstable-couples engagements mpref wpref)
   (let loop ((engs engagements)
-             (mpref mpref)
-             (wpref wpref)
              (acc '()))
     ; iterate through engagements to find unstable one's
     (if (null? engs)
@@ -35,8 +33,8 @@
           (if (or (better-match-exists? man woman (get-pref-list mpref man) wpref engagements)
                    (better-match-exists? woman man (get-pref-list wpref woman) mpref (map (lambda (x) (cons (cdr x) (car x))) engagements)))
               ; add ustable match to the unstable matches lis
-              (loop (cdr engs) mpref wpref (cons couple acc))
-              (loop (cdr engs) mpref wpref acc))))))
+              (loop (cdr engs) (cons couple acc))
+              (loop (cdr engs) acc))))))
 
 ; TODO 2
 ; Implementați funcția engage care primește o listă free-men
