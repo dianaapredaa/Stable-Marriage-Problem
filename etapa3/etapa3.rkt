@@ -70,11 +70,15 @@
             (let* ((woman (car women))
                    (couple (cons woman man)))
               (cond
-                ((null? pref-list) (men-loop (cdr free-m) engs))
+                ; if list is empty (impossible case i hope), leave the man single
+                ((null? women) (men-loop (cdr free-m) engs))
+                ; if current woman is single, couple with single man
                 ((null? (filter (lambda (x) (equal? woman (car x))) engs)) (men-loop (cdr free-m) (cons couple engs)))
-                ((and (better-match-exists? (get-partner engs woman) woman (get-pref-list mpref (get-partner engs woman)) wpref engs)
-                      (preferable? (get-pref-list wpref woman) man (get-partner engs woman))) (men-loop (cdr (cons man free-m)) (update-engagements engs woman man)))
-                (else (women-loop (cdr pref-list))))))))))
+                ; if the woman is married, there is a better partner, and the current man is one of them, couple them and leave previous husband single
+                ((preferable? (get-pref-list wpref woman) man (get-partner engs woman))
+                 (men-loop (cons (get-partner engs woman) (cdr free-m)) (update-engagements engs woman man)))
+                ; else next woman
+                (else (women-loop (cdr women))))))))))
 
 ; TODO 3
 ; Implementați funcția gale-shapley care este un wrapper pentru
@@ -83,8 +87,7 @@
 ; de preferințe feminine wpref și calculează o listă completă de
 ; logodne stabile conform acestor preferințe.
 (define (gale-shapley mpref wpref)
-  'your-code-here)
-
+  (engage (get-men mpref) '() mpref wpref))
 
 ; TODO 4
 ; Implementați funcția get-couple-members care primește o listă
@@ -92,5 +95,5 @@
 ; care apar în perechi.
 ; Folosiți funcționale, fără recursivitate explicită.
 (define (get-couple-members pair-list)
-  (apply append (map (lambda (pair) (list (car pair) (cdr pair))) pair-list)))
+  (apply append (map (lambda (couple) (list (car couple) (cdr couple))) pair-list)))
 
