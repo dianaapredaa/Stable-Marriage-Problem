@@ -138,7 +138,6 @@
 ; - fiecare cuplu din lista engagements are pe prima poziție
 ;   o femeie
 (define (stable-match? engagements mpref wpref)
-  (if (null? (filter (lambda (x) (equal? true x)) (map (or (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements))
-                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (reverse engagements)))) engagements)))
+  (if (null? (filter (lambda (x) (equal? true x)) (map (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements)) engagements)))
       #t
       #f))

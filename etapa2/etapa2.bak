@@ -15,7 +15,7 @@
 ; bărbaților și calculează lista bărbaților din problemă.
 ; Folosiți orice funcțională exceptând foldl/foldr.
 (define (get-men mpref)
-  )
+  (map car mpref))
 
 
 ; TODO 2
@@ -25,7 +25,7 @@
 ; Folosiți foldl sau foldr, astfel încât să nu fie necesare
 ; operații de tip append sau reverse.
 (define (get-women wpref)
-  'your-code-here)
+  (foldr (lambda (x acc) (cons (car x) acc)) '() wpref))
 
 
 ; TODO 3
@@ -39,8 +39,7 @@
 ; (get-pref-list wpref 'ana) => '(bobo adi cos)
 ; Folosiți minim o funcțională și minim o funcție anonimă.
 (define (get-pref-list pref person)
-  'your-code-here)
-
+  (cdr (car (filter (lambda (x) (not (false? x))) (map (lambda (x) (member person x)) pref)))))
 
 ; TODO 4
 ; Ca în etapa 1, dar este interzisă recursivitatea explicită
@@ -52,9 +51,8 @@
 ; și false în caz contrar.
 ; Folosiți funcția member.
 (define (preferable? pref-list x y)
-  'your-code-here)
-
-
+  (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
+ 
 ; TODO 5
 ; Implementați recursiv funcționala find-first, care primește
 ; un predicat și o listă și întoarce primul element al listei
@@ -63,7 +61,10 @@
 ; Implementarea trebuie să fie eficientă în sensul că nu trebuie
 ; să continue explorarea listei odată ce s-a găsit elementul.
 (define (find-first p L)
-  'your-code-here)
+  (cond
+    ((null? L) #f)
+    ((p (car L)) (car L))
+    (else (find-first p (cdr L)))))
 
 
 ; TODO 6
@@ -75,9 +76,11 @@
 ; întoarce false.
 ; Folosiți find-first, fără să îl apelați de 2 ori (hint: define în define).
 (define (get-partner engagements person)
-  'your-code-here)
-  
-
+  (define pair (find-first (lambda (x) (equal? (car x) person)) engagements))
+  (if (not (false? pair))
+      (cdr pair)
+      #f))
+ 
 ; TODO 7
 ; Implementați recursiv funcționala change-first care primește
 ; un predicat p, o listă L și o valoare val, și întoarce o nouă 
@@ -86,8 +89,10 @@
 ; Dacă niciun element din L nu satisface predicatul, lista L
 ; rămâne neschimbată.
 (define (change-first p L val)
-  'your-code-here)
-
+    (cond
+      ((null? L) null)
+      ((p (car L)) (cons val (cdr L)))
+      (else (cons (car L) (change-first p (cdr L) val)))))
 
 ; TODO 8
 ; Implementați funcția update-engagements care primește o listă de
@@ -100,18 +105,26 @@
 ;   persoanele de același gen cu p1
 ; Folosiți change-first.
 (define (update-engagements engagements p1 p2)
-  'your-code-here)
-
-
+  (change-first (lambda (x) (equal? (car x) p1)) engagements (cons p1 p2)))
+  
 ; TODO
 ; Copiați implementarea funcției better-match-exists? din etapa 1.
 ; Funcția nu este repunctată de checker, dar este necesară pentru
 ; implementarea funcției stable-match? de mai jos.
 ; Dacă nu ați implementat better-match-exists? în etapa 1, solicitați 
 ; o rezolvare de la asistent, astfel încât să puteți continua.
-(define (better-match-exists? p1 p2 p1-list pref2 engagements)
-  'your-code-here)
 
+; functie primita de la laborant
+(define (better-match-exists? p1 p2 p1-list pref2 engagements)
+  (define (better-match? p1 p1-list p2 p p-list p-partner)
+    (and (preferable? p1-list p p2)
+         (preferable? p-list p1 p-partner)
+         (not (equal? p p2))
+         (not (equal? p1 p-partner))))
+  (cond ((null? engagements) #f)
+        ((better-match? p1 p1-list p2
+                        (car (first engagements)) (get-pref-list pref2 (car (first engagements))) (cdr (first engagements))) #t)
+        (else (better-match-exists? p1 p2 p1-list pref2 (rest engagements)))))
 
 ; TODO 9
 ; Implementați funcția stable-match? care primește o listă 
@@ -125,5 +138,7 @@
 ; - fiecare cuplu din lista engagements are pe prima poziție
 ;   o femeie
 (define (stable-match? engagements mpref wpref)
-  'your-code-here)
-
+  (if (null? (filter (lambda (x) (equal? true x)) (map (or (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements))
+                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (reverse engagements)))) engagements)))
+      #t
+      #f))

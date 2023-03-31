@@ -21,6 +21,8 @@
 ; aceleași argumente.
 ; Folosiți una sau mai multe dintre expresiile let, let*, letrec,
 ; named let pentru a vă putea conforma acestor restricții.
+
+
 (define (get-unstable-couples engagements mpref wpref)
   (let loop ((engs engagements)
              (acc '()))
