@@ -53,21 +53,20 @@
 ;   întoarcă în aceeași listă atât informația despre cine din
 ;   cameră este logodit, cât și despre cine este singur
 (define (match person engagements pref1 pref2 queue)
-  ; get person's pref list
-  (let ((pref-list (get-pref-list pref1 person)))
-    ; itterate through person's pref list
-    (let loop ((pref-person (car pref-list))
-               (eng engagements))
-      ; check if the partner is in the room
-      (if (not (false? (member pref-person (map (lambda (x) (car x)) engagements))))
-      ; check if the partner is happyly married
-      ; check if the person is a better match for the partner
-          (if (preferable (get-pref-list pref2 pref-person) person (get-partner engagements pref-person))
-              (loop (cdr pref-list) (update-engagments engagements pref-person person))
-             
-           
-
-
+  (let loop-engagements ((eng engagements)
+                         (person person))
+   ; get person's pref list and itterate through person's pref list
+    (let loop ((pref-list (get-pref-list pref1 person)))
+      (if (null? pref-list)
+          (cons (cons #f person) eng)
+          (let* ((pref-person (car pref-list)) (pref-person-partner (get-partner eng pref-person)))
+            ; check if the partner is in the room
+            ; check if the partner is happyly married and the person is a better match for the partner
+            (if (and (not (false? (member pref-person (map (lambda (x) (car x)) eng))))
+                     (preferable? (get-pref-list pref2 pref-person) person pref-person-partner))
+                (loop-engagements (update-engagements eng pref-person person) pref-person-partner)
+                (loop (cdr pref-list))))))))
+              
 ; TODO 2
 ; Implementați funcția path-to-stability care primește lista
 ; engagements a cuplurilor din cameră, o listă de preferințe 
