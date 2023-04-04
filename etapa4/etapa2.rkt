@@ -51,8 +51,7 @@
 ; și false în caz contrar.
 ; Folosiți funcția member.
 (define (preferable? pref-list x y)
-  (equal? x (car (filter (lambda (a) (or (member a (list x))
-                                         (member a (list y)))) pref-list))))
+  (equal? (car (filter (lambda (a) (or (member a (list x)) (member a (list y)))) pref-list)) x))
  
 ; TODO 5
 ; Implementați recursiv funcționala find-first, care primește
@@ -127,6 +126,7 @@
                         (car (first engagements)) (get-pref-list pref2 (car (first engagements))) (cdr (first engagements))) #t)
         (else (better-match-exists? p1 p2 p1-list pref2 (rest engagements)))))
 
+
 ; TODO 9
 ; Implementați funcția stable-match? care primește o listă 
 ; completă de logodne engagements, o listă de preferințe masculine 
@@ -139,5 +139,7 @@
 ; - fiecare cuplu din lista engagements are pe prima poziție
 ;   o femeie
 (define (stable-match? engagements mpref wpref)
-  (null? (filter (lambda (x) (equal? true x))
-                 (map (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements)) engagements))))
+  (if (null? (filter (lambda (x) (equal? true x)) (map (or (lambda (x) (better-match-exists? (cdr x) (car x) (get-pref-list mpref (cdr x)) wpref engagements))
+                                                           (lambda (x) (better-match-exists? (car x) (cdr x) (get-pref-list wpref (car x)) mpref (map (lambda (x) (cons (cdr x) (car x))) engagements)))) engagements)))
+      #t
+      #f))

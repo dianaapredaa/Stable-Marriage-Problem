@@ -53,19 +53,7 @@
 ;   întoarcă în aceeași listă atât informația despre cine din
 ;   cameră este logodit, cât și despre cine este singur
 (define (match person engagements pref1 pref2 queue)
-  ; get person's pref list
-  (let ((pref-list (get-pref-list pref1 person)))
-    ; itterate through person's pref list
-    (let loop ((pref-person (car pref-list))
-               (eng engagements))
-      ; check if the partner is in the room
-      (if (not (false? (member pref-person (map (lambda (x) (car x)) engagements))))
-      ; check if the partner is happyly married
-      ; check if the person is a better match for the partner
-          (if (preferable (get-pref-list pref2 pref-person) person (get-partner engagements pref-person))
-              (loop (cdr pref-list) (update-engagments engagements pref-person person))
-             
-           
+  'your-code-here)
 
 
 ; TODO 2
